@@ -1,35 +1,52 @@
-# Guía de colaboración
+
+# Guía de Colaboración
 
 ## Flujo de ramas
-- `main`: código estable (producción) NO TOCAR NADA EN MAIN.
-- `develop`: rama de integración.
-- `feature/<nombre>`: nuevas funcionalidades. Siempre salen desde `develop`.
-
-## Roles
-
-### Colaboradores
-1. Crear una rama feature desde develop:
-   ```bash
-   git checkout develop
-   git pull origin develop
-   git checkout -b feature/nombre
-   ```
-
-2. Hacer commits en `feature/nombre`.
-
-3. Subir la rama al remoto:
-   ```bash
-   git push origin feature/nombre
-   ```
-
-4. Abrir un **Pull Request** en GitHub de `feature/nombre` → `develop`.
+- **`main`** → Código estable en producción. **Solo el líder puede modificarla.**
+- **`develop`** → Rama de trabajo. Aquí colaboran todos y se integran los cambios.
 
 ---
 
-### Líder del proyecto
-1. Revisar y aceptar los PR de los colaboradores hacia `develop`.
+## 👥 Colaboradores
 
-2. Cuando todo en `develop` esté probado:
+1. Descargar el proyecto:
+   ```bash
+   git clone <url-repo>
+   cd <carpeta-repo>
+   ```
+
+2. Cambiar a la rama de trabajo:
+   ```bash
+   git checkout develop
+   git pull origin develop
+   ```
+!Si hay conflictos debes solucionarlo!
+
+3. Hacer cambios y guardarlos:
+   ```bash
+   git add .
+   git commit -m "Descripción clara del cambio"
+   ```
+
+4. Subir cambios al repositorio remoto:
+   ```bash
+   git push origin develop
+   ```
+
+⚠️ **Importante:** TRABAJAR SIEMPRE SOBRE `develop`.  
+Si aparecen conflictos, deben resolverse en `develop` antes de que el líder haga la fusión con `main`.
+
+---
+
+## 🧑‍💻 Líder del proyecto
+
+1. Revisar la rama `develop` con los últimos cambios:
+   ```bash
+   git checkout develop
+   git pull origin develop
+   ```
+
+2. Pasar `develop` a `main` cuando esté estable:
    ```bash
    git checkout main
    git pull origin main
@@ -39,8 +56,4 @@
    git push origin vX.Y
    ```
 
----
-
-## Convenciones
-- Usar nombres de ramas en inglés: `feature/notes`, `bugfix/login`, etc.
-- Mensajes de commit claros y en presente: "Add notes API" en vez de "added".
+Solo el líder controla los merges a `main` y crea las versiones (tags).
