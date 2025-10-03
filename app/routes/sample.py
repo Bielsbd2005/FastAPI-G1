@@ -5,7 +5,7 @@ from app.models.item import Note, NoteCreate
 
 router = APIRouter(prefix="/api/notes", tags=["notes"])
 
-# In-memory "database" for the MVP
+# In-memory "database"
 _notes: List[Note] = []
 _next_id = 1
 
