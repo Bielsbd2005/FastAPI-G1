@@ -1,124 +1,82 @@
-# Notes MVP API
+# Notes MVP
 
-> Pequeña API REST construida con FastAPI para gestionar notas.
+Pequeño proyecto con FastAPI que ahora ofrece una experiencia mínima pero funcional para registrar notas: API REST, base de datos SQLite y una vista HTML/CSS para probar el flujo end-to-end.
 
-Este repositorio contiene una aplicación mínima que permite crear, listar, obtener, actualizar y borrar notas en memoria. Está pensada como ejemplo didáctico o punto de partida para un proyecto más completo.
+## Funcionalidades clave
 
-## Características
-
-- API REST con FastAPI
-- Almacenamiento en memoria (lista Python) — no persistente
-- Esquemas de validación con Pydantic
-- Tests básicos con pytest
+- API REST en `/api/notes` con operaciones CRUD completas.
+- Persistencia con SQLite (archivo `notes.db` en la raíz del proyecto).
+- Interfaz web sencilla en `http://127.0.0.1:8000/app` para crear, listar y eliminar notas.
+- Esquemas de validación con Pydantic v2.
+- Suite básica de pruebas con pytest.
 
 ## Estructura del proyecto
 
 ```
 app/
-  main.py            # Entrypoint de FastAPI
-  requirements.txt   # Dependencias del proyecto
+  main.py             # Arranque de FastAPI, mounting de estáticos y frontend
+  requirements.txt    # Dependencias de la app
+  database.py         # Motor SQLAlchemy y sesión
   models/
-    item.py          # Modelos Pydantic (Note, NoteCreate)
+    item.py           # Modelos Pydantic (Note, NoteCreate)
+    note_model.py     # Modelo SQLAlchemy (tabla notes)
   routes/
-    sample.py        # Router con endpoints /api/notes
+    sample.py         # Endpoints /api/notes usando la base de datos
+  static/
+    css/styles.css    # Estilos del PMV
+  templates/
+    index.html        # Página HTML con JS para consumir la API
   tests/
-    test_notes.py    # Tests para las rutas de notas
-    test_sample.py   # Tests adicionales / ejemplo
+    test_notes.py     # Pruebas principales de la API
+    test_sample.py    # Ejemplos adicionales
 ```
-
-## Tecnologías
-
-- Python
-- FastAPI
-- Pydantic
-- Uvicorn (servidor ASGI)
-- pytest (tests)
 
 ## Requisitos
 
-- Python 3.8+ (compatible con versiones recientes)
+- Python 3.9 o superior.
 
-## Instalación (Windows PowerShell)
-
-1. Crear y activar un entorno virtual (recomendado):
+## Instalación rápida (PowerShell)
 
 ```powershell
-# Crear el virtualenv
+# Crear y activar un entorno virtual recomendado
 python -m venv .venv
-# Activarlo
 .\venv\Scripts\Activate.ps1
-```
 
-2. Instalar dependencias:
-
-```powershell
+# Instalar dependencias
 pip install -r .\app\requirements.txt
 ```
 
-## Ejecutar la aplicación
-
-En desarrollo con autoreload usando uvicorn:
+## Ejecutar el servidor
 
 ```powershell
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Luego abre en el navegador:
+- Frontend PMV: <http://127.0.0.1:8000/app>
+- Documentación interactiva: <http://127.0.0.1:8000/docs>
+- Redoc: <http://127.0.0.1:8000/redoc>
 
-- Documentación interactiva (Swagger): http://127.0.0.1:8000/docs
-- Redoc: http://127.0.0.1:8000/redoc
+## API `/api/notes`
 
-También hay un endpoint de salud en la raíz:
+| Método | Ruta              | Descripción                |
+| ------ | ----------------- | -------------------------- |
+| POST   | `/api/notes/`     | Crear una nota             |
+| GET    | `/api/notes/`     | Listar todas las notas     |
+| GET    | `/api/notes/{id}` | Recuperar una nota puntual |
+| PUT    | `/api/notes/{id}` | Actualizar título/nota     |
+| DELETE | `/api/notes/{id}` | Eliminar una nota          |
 
-```http
-GET /
-Response: { "status": "ok", "message": "Notes MVP is running" }
-```
-
-## Endpoints principales (/api/notes)
-
-Base path: `/api/notes`
-
-- POST /api/notes/ — Crear una nota
-
-  - Body JSON: { "title": "Mi título", "content": "Texto de la nota" }
-  - Respuesta 201: objeto Note con campos `id` y `created_at`.
-
-- GET /api/notes/ — Listar todas las notas
-
-  - Respuesta 200: lista de objetos Note
-
-- GET /api/notes/{id} — Obtener una nota por id
-
-  - Respuesta 200: objeto Note o 404 si no existe
-
-- PUT /api/notes/{id} — Actualizar una nota (reemplazo)
-
-  - Body JSON: { "title": "Nuevo título", "content": "Nuevo contenido" }
-  - Respuesta 200: objeto Note actualizado o 404 si no existe
-
-- DELETE /api/notes/{id} — Borrar una nota
-  - Respuesta 204 No Content o 404 si no existe
-
-Ejemplo con PowerShell (crear nota):
+Ejemplo rápido con PowerShell:
 
 ```powershell
-$body = @{title = 'Prueba'; content = 'Contenido de prueba'} | ConvertTo-Json
+$body = @{title = 'Prueba'; content = 'Contenido'} | ConvertTo-Json
 Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/notes/ -Body $body -ContentType 'application/json'
 ```
 
-Ejemplo con curl (alternativa):
-
-```bash
-curl -X POST "http://127.0.0.1:8000/api/notes/" -H "Content-Type: application/json" -d '{"title":"Prueba","content":"Contenido"}'
-```
-
 ## Tests
-
-Ejecutar tests con pytest desde la raíz del proyecto:
 
 ```powershell
 pytest -q
 ```
 
-Los tests usando `httpx` simulan peticiones a la app y validan comportamiento básico.
+Las pruebas utilizan `TestClient` para validar los endpoints principales.
