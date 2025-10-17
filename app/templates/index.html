@@ -1,0 +1,184 @@
+ <!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notas - PMV</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Notas rápidas</h1>
+      <p class="subtitle">PMV construido con FastAPI + SQLite + HTML/CSS</p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Crear una nueva nota</h2>
+        <form id="note-form">
+          <label for="title">Título</label>
+          <input id="title" name="title" type="text" maxlength="200" required />
+
+          <label for="content">Contenido</label>
+          <textarea id="content" name="content" rows="4" required></textarea>
+
+          <button type="submit">Guardar nota</button>
+        </form>
+        <p id="form-message" class="form-message" aria-live="polite"></p>
+      </section>
+
+      <section class="card">
+        <div class="list-header">
+          <h2>Notas registradas</h2>
+          <button id="refresh-btn" class="secondary">Actualizar</button>
+        </div>
+        <ul id="notes-list" class="notes-list"></ul>
+        <template id="note-template">
+          <li class="note-item">
+            <div class="note-text">
+              <h3 data-field="title"></h3>
+              <time data-field="created_at"></time>
+              <p data-field="content"></p>
+            </div>
+            <button class="danger" data-action="delete">Eliminar</button>
+          </li>
+        </template>
+      </section>
+    </main>
+
+    <footer>
+      <small>Endpoints REST disponibles bajo <code>/api/notes</code>.</small>
+    </footer>
+
+    <script>
+      const apiBase = "/api/notes";
+      const form = document.getElementById("note-form");
+      const titleInput = document.getElementById("title");
+      const contentInput = document.getElementById("content");
+      const notesList = document.getElementById("notes-list");
+      const template = document.getElementById("note-template");
+      const message = document.getElementById("form-message");
+      const refreshBtn = document.getElementById("refresh-btn");
+
+      const formatDate = (isoString) => {
+        const date = new Date(isoString);
+        return new Intl.DateTimeFormat("es-ES", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }).format(date);
+      };
+
+      const showMessage = (text, type = "success") => {
+        message.textContent = text;
+        message.dataset.type = type;
+        if (text) {
+          setTimeout(() => {
+            message.textContent = "";
+            delete message.dataset.type;
+          }, 3000);
+        }
+      };
+
+      const clearList = () => {
+        while (notesList.firstChild) {
+          notesList.removeChild(notesList.firstChild);
+        }
+      };
+
+      const renderNotes = (notes) => {
+        clearList();
+        if (!notes.length) {
+          const empty = document.createElement("li");
+          empty.textContent = "No hay notas aún. Crea la primera.";
+          empty.className = "note-empty";
+          notesList.appendChild(empty);
+          return;
+        }
+
+        notes.forEach((note) => {
+          const clone = template.content.cloneNode(true);
+          clone.querySelector('[data-field="title"]').textContent = note.title;
+          clone.querySelector('[data-field="created_at"]').textContent =
+            "Creada: " + formatDate(note.created_at);
+          clone.querySelector('[data-field="content"]').textContent =
+            note.content;
+          const deleteBtn = clone.querySelector('[data-action="delete"]');
+          deleteBtn.dataset.id = note.id;
+          notesList.appendChild(clone);
+        });
+      };
+
+      const fetchNotes = async () => {
+        try {
+          const response = await fetch(apiBase);
+          if (!response.ok) throw new Error("No se pudieron obtener las notas");
+          const data = await response.json();
+          renderNotes(data);
+        } catch (error) {
+          console.error(error);
+          showMessage("Error al cargar notas", "error");
+        }
+      };
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const payload = {
+          title: titleInput.value.trim(),
+          content: contentInput.value.trim(),
+        };
+
+        if (!payload.title || !payload.content) {
+          showMessage("Completa todos los campos", "error");
+          return;
+        }
+
+        try {
+          const response = await fetch(apiBase + "/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) throw new Error("No se pudo guardar la nota");
+
+          titleInput.value = "";
+          contentInput.value = "";
+
+          showMessage("Nota guardada correctamente");
+          await fetchNotes();
+        } catch (error) {
+          console.error(error);
+          showMessage("Error al guardar la nota", "error");
+        }
+      });
+
+      notesList.addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-action='delete']");
+        if (!button) return;
+
+        const noteId = button.dataset.id;
+        if (!noteId) return;
+
+        if (!window.confirm("¿Eliminar esta nota?")) return;
+
+        try {
+          const response = await fetch(`${apiBase}/${noteId}`, {
+            method: "DELETE",
+          });
+          if (!response.ok)
+            throw new Error("No se pudo eliminar la nota seleccionada");
+          showMessage("Nota eliminada");
+          await fetchNotes();
+        } catch (error) {
+          console.error(error);
+          showMessage("Error al eliminar la nota", "error");
+        }
+      });
+
+      refreshBtn.addEventListener("click", fetchNotes);
+
+      // Carga inicial
+      fetchNotes();
+    </script>
+  </body>
+</html>
