@@ -1,60 +1,80 @@
-# Notes MVP
+> [!IMPORTANT]
+> **Grupo 1**
+> 
+> **Integrantes:** Ouissal, Fernanda Osorio, Pol García y Biel García
 
-Pequeño proyecto con FastAPI que ahora ofrece una experiencia mínima pero funcional para registrar notas: API REST, base de datos SQLite y una vista HTML/CSS para probar el flujo end-to-end.
+
+# Proyecto de aplicación de notas con FastAPI
+En el estado actual, el proyecto desarrollado con FastAPI implementa una API REST funcional para registrar notas. Utiliza SQLite como base de datos y cuenta con una interfaz HTML/CSS sencilla para probar el flujo completo de creación y visualización de notas!!
+
+# Objetivo del proyecto
+El objetivo principal del proyecto es construir una aplicación web ligera y modular que permita gestionar notas de manera eficiente mediante una arquitectura basada en API REST. Buscamos servir como una base de aprendizaje y práctica para el desarrollo backend con FastAPI, la integración de bases de datos y el uso de interfaces web minimalistas para probar funcionalidades end-to-end.
+A medio plazo, el proyecto pretende evolucionar hacia una aplicación más completa, incorporando autenticación de usuarios, persistencia avanzada, adición de categorías de notas, filtrado de notas, buscador...
+
+---
+# Avanze realizado 
+Actualmente, el proyecto cuenta con una estructura funcional que cubre todo el flujo básico de una aplicación:
+* Creación, lectura, actualización y eliminación de notas.
+* Persistencia local en base de datos SQLite.
+* Interfaz web minimalista para probar las operaciones principales.
+* Validación de datos con Pydantic v2 y manejo de errores controlado.
+* Pruebas iniciales automatizadas con pytest para los endpoints principales.
+Este punto marca el cierre de la primera fase del desarrollo (MVP funcional), garantizando que la base técnica está lista para futuras ampliaciones.
 
 ## Funcionalidades clave
-
-- API REST en `/api/notes` con operaciones CRUD completas.
+- API REST en `/api/notes`.
 - Persistencia con SQLite (archivo `notes.db` en la raíz del proyecto).
 - Interfaz web sencilla en `http://127.0.0.1:8000/app` para crear, listar y eliminar notas.
 - Esquemas de validación con Pydantic v2.
 - Suite básica de pruebas con pytest.
 
-## Estructura del proyecto
+## Próximos pasos
+- Autenticación: registro e inicio de sesión de usuarios.
+- Organización: categorías, etiquetas y filtros para las notas.
+- Búsqueda: buscador rápido por título o contenido.
+- Interfaz: diseño más claro e interactivo, con mensajes y sesiones.
+- Experiencia: paginación, favoritos y posibles modos visuales.
 
-```
-app/
-  main.py             # Arranque de FastAPI, mounting de estáticos y frontend
-  requirements.txt    # Dependencias de la app
-  database.py         # Motor SQLAlchemy y sesión
-  models/
-    item.py           # Modelos Pydantic (Note, NoteCreate)
-    note_model.py     # Modelo SQLAlchemy (tabla notes)
-  routes/
-    sample.py         # Endpoints /api/notes usando la base de datos
-  static/
-    css/styles.css    # Estilos del PMV
-  templates/
-    index.html        # Página HTML con JS para consumir la API
-  tests/
-    test_notes.py     # Pruebas principales de la API
-    test_sample.py    # Ejemplos adicionales
-```
+---
+# Como probar nuestra aplicación
 
 ## Requisitos
+> [!IMPORTANT]
+> Asegúrate de tener Python 3.9 o superior instalado antes de continuar.
+> Puedes verificarlo con:
+> ```powershell
+> python --version
+> ```
 
-- Python 3.9 o superior.
+> [!TIP]
+> Se recomienda usar un entorno virtual para evitar conflictos con otras dependencias de tu sistema.
+> ```powershell
+> # Crear y activar un entorno virtual recomendado
+> python -m venv .venv
+> .\venv\Scripts\Activate.ps1
+> ```
 
-## Instalación rápida (PowerShell)
+## Ejecución rápida
 
+### - Paso 1: Instalar dependencias
 ```powershell
-# Crear y activar un entorno virtual recomendado
-python -m venv .venv
-.\venv\Scripts\Activate.ps1
-
-# Instalar dependencias
 pip install -r .\app\requirements.txt
 ```
 
-## Ejecutar el servidor
-
+### - Paso 2: Ejecutar servidor
 ```powershell
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-- Frontend PMV: <http://127.0.0.1:8000/app>
-- Documentación interactiva: <http://127.0.0.1:8000/docs>
-- Redoc: <http://127.0.0.1:8000/redoc>
+> [!IMPORTANT]
+> Asegúrate de ejecutar los siguientes comandos desde la raíz del proyecto, donde se encuentra la carpeta app/.
+
+### - Paso 3: Navegar mediante los accesos **(RECOMENDADO EL /APP CON EL FRONTED)**
+  - Frontend PMV: <http://127.0.0.1:8000/app>
+  - Documentación interactiva: <http://127.0.0.1:8000/docs>
+  - Redoc: <http://127.0.0.1:8000/redoc>
+
+--- 
 
 ## API `/api/notes`
 
