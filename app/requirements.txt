@@ -1,0 +1,8 @@
+fastapi
+pytest
+uvicorn
+httpx
+SQLAlchemy
+aiofiles
+itsdangerous
+psycopg2-binary
