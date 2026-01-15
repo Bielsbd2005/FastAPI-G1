@@ -15,3 +15,4 @@ class NoteORM(Base):
     content = Column(String, nullable=False)
     owner = Column(String(100), nullable=False, index=True, default="anonymous")
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = Column(DateTime, nullable=True, onupdate=datetime.utcnow)

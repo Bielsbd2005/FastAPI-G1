@@ -17,6 +17,7 @@ class Note(NoteBase):
     id: int
     owner: str
     created_at: datetime
+    updated_at: Optional[datetime] = None
     # Pydantic v2 uses `model_config` with `from_attributes`.
     # This code targets Pydantic v2 in the test/runtime environment.
     model_config = {"from_attributes": True}

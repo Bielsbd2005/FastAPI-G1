@@ -1,696 +1,802 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notas - PMV Moderno</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <style>
-      /* --- VARIABLES & RESET --- */
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notas - PMV Moderno</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- VARIABLES & RESET --- */
+    :root {
+      --primary: #6366f1;
+      /* Indigo */
+      --primary-hover: #4f46e5;
+      --secondary-bg: #e2e8f0;
+      --secondary-text: #475569;
+      --danger: #ef4444;
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+      --font-main: 'Inter', sans-serif;
+    }
+
+    /* Modo Oscuro Automático */
+    @media (prefers-color-scheme: dark) {
       :root {
-        --primary: #6366f1; /* Indigo */
-        --primary-hover: #4f46e5;
-        --secondary-bg: #e2e8f0;
-        --secondary-text: #475569;
-        --danger: #ef4444;
-        --bg-body: #f8fafc;
-        --bg-card: #ffffff;
-        --text-main: #1e293b;
-        --text-muted: #64748b;
-        --border: #e2e8f0;
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        --radius: 12px;
-        --font-main: 'Inter', sans-serif;
+        --bg-body: #0f172a;
+        --bg-card: #1e293b;
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border: #334155;
+        --secondary-bg: #334155;
+        --secondary-text: #cbd5e1;
       }
+    }
 
-      /* Modo Oscuro Automático */
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg-body: #0f172a;
-          --bg-card: #1e293b;
-          --text-main: #f1f5f9;
-          --text-muted: #94a3b8;
-          --border: #334155;
-          --secondary-bg: #334155;
-          --secondary-text: #cbd5e1;
-        }
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-      body {
-        margin: 0;
-        font-family: var(--font-main);
-        background-color: var(--bg-body);
-        color: var(--text-main);
-        line-height: 1.5;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
+    /* --- HEADER --- */
+    .app-header {
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+      /* Efecto cristal */
+      background-color: color-mix(in srgb, var(--bg-card) 90%, transparent);
+    }
 
-      /* --- HEADER --- */
-      .app-header {
-        background-color: var(--bg-card);
-        border-bottom: 1px solid var(--border);
-        padding: 1.5rem 1rem;
-        text-align: center;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        backdrop-filter: blur(8px); /* Efecto cristal */
-        background-color: color-mix(in srgb, var(--bg-card) 90%, transparent);
-      }
+    .app-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.025em;
+    }
 
-      .app-header h1 {
-        margin: 0;
-        font-size: 1.5rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, var(--primary), #818cf8);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -0.025em;
-      }
+    .subtitle {
+      margin: 0.5rem 0 0;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
 
-      .subtitle {
-        margin: 0.5rem 0 0;
-        font-size: 0.875rem;
-        color: var(--text-muted);
-      }
+    /* --- LAYOUT --- */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
 
-      /* --- LAYOUT --- */
-      main {
-        flex: 1;
-        width: 100%;
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-      }
+    /* --- CARDS & SECTIONS --- */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-      /* --- CARDS & SECTIONS --- */
-      .card {
-        background: var(--bg-card);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-        border: 1px solid var(--border);
-        box-shadow: var(--shadow-sm);
-        transition: transform 0.2s, box-shadow 0.2s;
-      }
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 1.25rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-      h2 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-top: 0;
-        margin-bottom: 1.25rem;
-        color: var(--text-main);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
+    /* --- FORMS --- */
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+      color: var(--text-muted);
+    }
 
-      /* --- FORMS --- */
-      label {
-        display: block;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-bottom: 0.4rem;
-        color: var(--text-muted);
-      }
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background-color: var(--bg-body);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      transition: all 0.2s;
+      margin-bottom: 1rem;
+    }
 
-      input, textarea {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        background-color: var(--bg-body);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 0.95rem;
-        color: var(--text-main);
-        transition: all 0.2s;
-        margin-bottom: 1rem;
-      }
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+      background-color: var(--bg-card);
+    }
 
-      input:focus, textarea:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
-        background-color: var(--bg-card);
-      }
+    input:disabled,
+    textarea:disabled,
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-      input:disabled, textarea:disabled, button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
 
-      textarea { resize: vertical; min-height: 100px; }
+    /* --- SESSION SECTION SPECIFIC --- */
+    .session-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
 
-      /* --- SESSION SECTION SPECIFIC --- */
+    .session-row input {
+      margin-bottom: 0;
+      flex-grow: 1;
+    }
+
+    .session-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .session-status {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      background-color: var(--bg-body);
+      display: inline-block;
+    }
+
+    .session-status[data-state="logged"] {
+      color: #10b981;
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+
+    .session-status[data-state="guest"] {
+      color: var(--text-muted);
+    }
+
+    /* --- BUTTONS --- */
+    button {
+      cursor: pointer;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button[type="submit"],
+    button:not(.secondary):not(.danger) {
+      background-color: var(--primary);
+      color: white;
+      box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+    }
+
+    button[type="submit"]:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      background-color: var(--secondary-bg);
+      color: var(--secondary-text);
+    }
+
+    button.secondary:hover {
+      background-color: var(--border);
+    }
+
+    button.danger {
+      background-color: transparent;
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    button.danger:hover {
+      background-color: rgba(239, 68, 68, 0.1);
+      border-color: var(--danger);
+    }
+
+    /* --- NOTES LIST (GRID LAYOUT) --- */
+    .list-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      margin-bottom: 0;
+      max-width: 250px;
+      border-radius: 20px;
+      /* Pill shape */
+      padding-left: 1.2rem;
+    }
+
+    .notes-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      /* Masonry-like grid */
+      gap: 1.5rem;
+    }
+
+    .note-item {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 200px;
+      transition: all 0.2s ease;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .note-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+
+    .note-text h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    .note-text time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .note-text p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .note-item button.danger {
+      align-self: flex-end;
+      margin-top: auto;
+    }
+
+    .note-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* --- MESSAGES --- */
+    .form-message {
+      min-height: 1.5rem;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .form-message[data-type="success"] {
+      color: #10b981;
+    }
+
+    .form-message[data-type="error"] {
+      color: var(--danger);
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+
+    footer code {
+      background: var(--secondary-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    /* --- MOBILE --- */
+    @media (max-width: 600px) {
       .session-row {
-        display: flex;
-        gap: 0.75rem;
-        align-items: flex-start;
+        flex-direction: column;
       }
 
-      .session-row input { margin-bottom: 0; flex-grow: 1; }
+      .session-row input {
+        width: 100%;
+      }
 
       .session-actions {
-        display: flex;
-        gap: 0.5rem;
+        width: 100%;
+        justify-content: stretch;
       }
 
-      .session-status {
-        margin-top: 1rem;
-        font-size: 0.875rem;
-        padding: 0.5rem 0.75rem;
-        border-radius: 6px;
-        background-color: var(--bg-body);
-        display: inline-block;
-      }
-      .session-status[data-state="logged"] { color: #10b981; background-color: rgba(16, 185, 129, 0.1); }
-      .session-status[data-state="guest"] { color: var(--text-muted); }
-
-      /* --- BUTTONS --- */
-      button {
-        cursor: pointer;
-        border: none;
-        padding: 0.75rem 1.25rem;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: all 0.2s;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+      .session-actions button {
+        flex: 1;
       }
 
-      button[type="submit"], button:not(.secondary):not(.danger) {
-        background-color: var(--primary);
-        color: white;
-        box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
-      }
-      button[type="submit"]:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
-
-      button.secondary {
-        background-color: var(--secondary-bg);
-        color: var(--secondary-text);
-      }
-      button.secondary:hover { background-color: var(--border); }
-
-      button.danger {
-        background-color: transparent;
-        color: var(--danger);
-        border: 1px solid rgba(239, 68, 68, 0.2);
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-      }
-      button.danger:hover {
-        background-color: rgba(239, 68, 68, 0.1);
-        border-color: var(--danger);
-      }
-
-      /* --- NOTES LIST (GRID LAYOUT) --- */
       .list-header {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
+        flex-direction: column;
+        align-items: stretch;
       }
 
       .search-input {
-        margin-bottom: 0;
-        max-width: 250px;
-        border-radius: 20px; /* Pill shape */
-        padding-left: 1.2rem;
+        max-width: 100%;
       }
+    }
+  </style>
+</head>
 
-      .notes-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Masonry-like grid */
-        gap: 1.5rem;
-      }
+<body>
+  <header class="app-header">
+    <h1>APLICACIÓN DE NOTAS</h1>
+    <p class="subtitle">Hecho por el grupo 1 </p>
+  </header>
 
-      .note-item {
-        background-color: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 1.25rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 200px;
-        transition: all 0.2s ease;
-        position: relative;
-        box-shadow: var(--shadow-sm);
-      }
-
-      .note-item:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-md);
-        border-color: var(--primary);
-      }
-
-      .note-text h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.1rem;
-        color: var(--text-main);
-        word-break: break-word;
-      }
-
-      .note-text time {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        display: block;
-        margin-bottom: 1rem;
-        font-style: italic;
-      }
-
-      .note-text p {
-        color: var(--text-muted);
-        font-size: 0.95rem;
-        white-space: pre-wrap;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
-      }
-
-      .note-item button.danger {
-        align-self: flex-end;
-        margin-top: auto;
-      }
-
-      .note-empty {
-        grid-column: 1 / -1;
-        text-align: center;
-        padding: 3rem;
-        color: var(--text-muted);
-        border: 2px dashed var(--border);
-        border-radius: var(--radius);
-        background-color: rgba(255,255,255,0.05);
-      }
-
-      /* --- MESSAGES --- */
-      .form-message {
-        min-height: 1.5rem;
-        font-size: 0.9rem;
-        margin-top: 0.5rem;
-        font-weight: 500;
-        text-align: center;
-      }
-      .form-message[data-type="success"] { color: #10b981; }
-      .form-message[data-type="error"] { color: var(--danger); }
-
-      /* --- FOOTER --- */
-      footer {
-        text-align: center;
-        padding: 2rem;
-        color: var(--text-muted);
-        font-size: 0.8rem;
-        border-top: 1px solid var(--border);
-        margin-top: auto;
-      }
-
-      footer code {
-        background: var(--secondary-bg);
-        padding: 0.2rem 0.4rem;
-        border-radius: 4px;
-        font-family: monospace;
-      }
-
-      /* --- MOBILE --- */
-      @media (max-width: 600px) {
-        .session-row { flex-direction: column; }
-        .session-row input { width: 100%; }
-        .session-actions { width: 100%; justify-content: stretch; }
-        .session-actions button { flex: 1; }
-        .list-header { flex-direction: column; align-items: stretch; }
-        .search-input { max-width: 100%; }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="app-header">
-      <h1>Notas V3</h1>
-      <p class="subtitle">Gestor de notas seguro y personal</p>
-    </header>
-
-    <main>
-      <section class="card">
-        <h2>👤 Acceso de Usuario</h2>
-        <form id="session-form">
-          <label for="username">Nombre de usuario</label>
-          <div class="session-row">
-            <input
-              id="username"
-              name="username"
-              type="text"
-              placeholder="Ej. Ana"
-              autocomplete="username"
-              required
-            />
-            <div class="session-actions">
-              <button type="submit">Ingresar</button>
-              <button type="button" id="logout-btn" class="secondary">
-                Salir
-              </button>
-            </div>
-          </div>
-          <p class="session-hint" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
-            Tus notas se guardan localmente bajo este alias.
-          </p>
-          <div id="session-status" class="session-status" data-state="guest" aria-live="polite">
-            No has iniciado sesión.
-          </div>
-        </form>
-      </section>
-
-      <section class="card">
-        <h2>📝 Nueva Nota</h2>
-        <form id="note-form">
-          <label for="title">Título</label>
-          <input id="title" name="title" type="text" maxlength="200" placeholder="Título de la nota..." required />
-
-          <label for="content">Contenido</label>
-          <textarea id="content" name="content" rows="3" placeholder="Escribe aquí..." required></textarea>
-
-          <button type="submit" style="width: 100%;">Guardar nota</button>
-        </form>
-        <p id="form-message" class="form-message" aria-live="polite"></p>
-      </section>
-
-      <section>
-        <div class="list-header">
-          <h2 style="margin:0">📚 Mis Notas</h2>
-          <div class="list-actions" style="display: flex; gap: 0.5rem; flex: 1; justify-content: flex-end;">
-            <input
-              id="search-input"
-              class="search-input"
-              type="search"
-              placeholder="🔍 Buscar..."
-              aria-label="Buscar notas"
-            />
-            <button id="refresh-btn" class="secondary" title="Actualizar">↻</button>
+  <main>
+    <section class="card">
+      <h2>👤 Acceso de Usuario</h2>
+      <form id="session-form">
+        <label for="username">Nombre de usuario</label>
+        <div class="session-row">
+          <input id="username" name="username" type="text" placeholder="Ej. Ana" autocomplete="username" required />
+          <div class="session-actions">
+            <button type="submit">Ingresar</button>
+            <button type="button" id="logout-btn" class="secondary">
+              Salir
+            </button>
           </div>
         </div>
+        <p class="session-hint" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+          Tus notas se guardan localmente bajo este alias.
+        </p>
+        <div id="session-status" class="session-status" data-state="guest" aria-live="polite">
+          No has iniciado sesión.
+        </div>
+      </form>
+    </section>
 
-        <ul id="notes-list" class="notes-list"></ul>
+    <section class="card">
+      <h2>📝 Nueva Nota</h2>
+      <form id="note-form">
+        <label for="title">Título</label>
+        <input id="title" name="title" type="text" maxlength="200" placeholder="Título de la nota..." required />
 
-        <template id="note-template">
-          <li class="note-item">
-            <div class="note-text">
-              <h3 data-field="title"></h3>
-              <time data-field="created_at"></time>
-              <p data-field="content"></p>
+        <label for="content">Contenido</label>
+        <textarea id="content" name="content" rows="3" placeholder="Escribe aquí..." required></textarea>
+
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="submit" id="submit-btn" style="flex: 1;">Guardar nota</button>
+          <button type="button" id="cancel-edit-btn" class="secondary" style="display: none;">Cancelar</button>
+        </div>
+      </form>
+      <p id="form-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <div class="list-header">
+        <h2 style="margin:0">📚 Mis Notas</h2>
+        <div class="list-actions" style="display: flex; gap: 0.5rem; flex: 1; justify-content: flex-end;">
+          <input id="search-input" class="search-input" type="search" placeholder="🔍 Buscar..."
+            aria-label="Buscar notas" />
+          <button id="refresh-btn" class="secondary" title="Actualizar">↻</button>
+        </div>
+      </div>
+
+      <ul id="notes-list" class="notes-list"></ul>
+
+      <template id="note-template">
+        <li class="note-item">
+          <div class="note-text">
+            <h3 data-field="title"></h3>
+            <div style="margin-bottom: 1rem;">
+              <time data-field="created_at" style="display: inline;"></time>
+              <time data-field="updated_at"
+                style="display: none; color: var(--primary); margin-left: 0.5rem; font-size: 0.75rem; font-style: italic;"></time>
             </div>
+            <p data-field="content"></p>
+          </div>
+          <p data-field="content"></p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; margin-top: auto; justify-content: flex-end;">
+            <button class="secondary" data-action="edit"
+              style="font-size: 0.8rem; padding: 0.5rem 1rem;">Editar</button>
             <button class="danger" data-action="delete">Eliminar</button>
-          </li>
-        </template>
-      </section>
-    </main>
+          </div>
+        </li>
+      </template>
+    </section>
+  </main>
 
-    <footer>
-      <small>API REST Endpoint: <code>/api/notes</code></small>
-    </footer>
+  <footer>
+    <small>API REST Endpoint: <code>/api/notes</code></small>
+  </footer>
 
-    <script>
-      const apiBase = "/api/notes";
-      const sessionApi = "/api/session/";
-      const form = document.getElementById("note-form");
-      const titleInput = document.getElementById("title");
-      const contentInput = document.getElementById("content");
-      const notesList = document.getElementById("notes-list");
-      const template = document.getElementById("note-template");
-      const message = document.getElementById("form-message");
-      const refreshBtn = document.getElementById("refresh-btn");
-      const searchInput = document.getElementById("search-input");
-      const sessionForm = document.getElementById("session-form");
-      const usernameInput = document.getElementById("username");
-      const logoutBtn = document.getElementById("logout-btn");
-      const sessionStatus = document.getElementById("session-status");
-      let currentSearch = "";
-      let currentUser = null;
+  <script>
+    const apiBase = "/api/notes";
+    const sessionApi = "/api/session/";
+    const form = document.getElementById("note-form");
+    const titleInput = document.getElementById("title");
+    const contentInput = document.getElementById("content");
+    const notesList = document.getElementById("notes-list");
+    const template = document.getElementById("note-template");
+    const message = document.getElementById("form-message");
+    const refreshBtn = document.getElementById("refresh-btn");
+    const searchInput = document.getElementById("search-input");
+    const sessionForm = document.getElementById("session-form");
+    const usernameInput = document.getElementById("username");
+    const logoutBtn = document.getElementById("logout-btn");
+    const sessionStatus = document.getElementById("session-status");
+    const submitBtn = document.getElementById("submit-btn");
+    const cancelEditBtn = document.getElementById("cancel-edit-btn");
+    let currentSearch = "";
+    let currentUser = null;
+    let editingNoteId = null;
 
-      const formatDate = (isoString) => {
-        const date = new Date(isoString);
-        return new Intl.DateTimeFormat("es-ES", {
-          dateStyle: "medium",
-          timeStyle: "short",
-        }).format(date);
-      };
+    const formatDate = (isoString) => {
+      const date = new Date(isoString);
+      return new Intl.DateTimeFormat("es-ES", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(date);
+    };
 
-      const showMessage = (text, type = "success") => {
-        message.textContent = text;
-        message.dataset.type = type;
-        if (text) {
-          setTimeout(() => {
-            message.textContent = "";
-            delete message.dataset.type;
-          }, 3000);
-        }
-      };
+    const showMessage = (text, type = "success") => {
+      message.textContent = text;
+      message.dataset.type = type;
+      if (text) {
+        setTimeout(() => {
+          message.textContent = "";
+          delete message.dataset.type;
+        }, 3000);
+      }
+    };
 
-      const clearList = () => {
-        while (notesList.firstChild) {
-          notesList.removeChild(notesList.firstChild);
-        }
-      };
+    const clearList = () => {
+      while (notesList.firstChild) {
+        notesList.removeChild(notesList.firstChild);
+      }
+    };
 
-      const renderLoggedOutState = () => {
-        clearList();
+    const renderLoggedOutState = () => {
+      clearList();
+      const empty = document.createElement("li");
+      empty.innerHTML = "🔒 <strong>Acceso restringido</strong><br>Inicia sesión para ver tus notas.";
+      empty.className = "note-empty";
+      notesList.appendChild(empty);
+    };
+
+    const renderNotes = (notes) => {
+      clearList();
+      if (!notes.length) {
         const empty = document.createElement("li");
-        empty.innerHTML = "🔒 <strong>Acceso restringido</strong><br>Inicia sesión para ver tus notas.";
+        empty.textContent = "📭 No hay notas aún. ¡Crea la primera!";
         empty.className = "note-empty";
         notesList.appendChild(empty);
-      };
+        return;
+      }
 
-      const renderNotes = (notes) => {
-        clearList();
-        if (!notes.length) {
-          const empty = document.createElement("li");
-          empty.textContent = "📭 No hay notas aún. ¡Crea la primera!";
-          empty.className = "note-empty";
-          notesList.appendChild(empty);
-          return;
+      notes.forEach((note) => {
+        const clone = template.content.cloneNode(true);
+        clone.querySelector('[data-field="title"]').textContent = note.title;
+        clone.querySelector('[data-field="created_at"]').textContent = formatDate(note.created_at);
+
+        if (note.updated_at) {
+          const updatedTime = clone.querySelector('[data-field="updated_at"]');
+          updatedTime.textContent = `(Editado: ${formatDate(note.updated_at)})`;
+          updatedTime.style.display = "inline";
+        }
+        clone.querySelector('[data-field="content"]').textContent = note.content;
+        const deleteBtn = clone.querySelector('[data-action="delete"]');
+        deleteBtn.dataset.id = note.id;
+
+        const editBtn = clone.querySelector('[data-action="edit"]');
+        editBtn.dataset.id = note.id;
+        editBtn.dataset.title = note.title;
+        editBtn.dataset.content = note.content;
+        notesList.appendChild(clone);
+      });
+    };
+
+    const setNotesEnabled = (enabled) => {
+      const fields = [
+        titleInput,
+        contentInput,
+        form.querySelector("button[type='submit']"),
+        refreshBtn,
+        searchInput,
+      ];
+      fields.forEach((el) => {
+        if (el) el.disabled = !enabled;
+      });
+    };
+
+    const updateSessionUI = () => {
+      if (currentUser) {
+        sessionStatus.textContent = `✅ Sesión activa: ${currentUser}`;
+        sessionStatus.dataset.state = "logged";
+        logoutBtn.disabled = false;
+        usernameInput.value = currentUser;
+        setNotesEnabled(true);
+      } else {
+        sessionStatus.textContent = "No has iniciado sesión.";
+        sessionStatus.dataset.state = "guest";
+        logoutBtn.disabled = true;
+        usernameInput.value = "";
+        setNotesEnabled(false);
+        renderLoggedOutState();
+      }
+    };
+
+    const fetchNotes = async (searchTerm = "") => {
+      if (!currentUser) {
+        renderLoggedOutState();
+        return;
+      }
+      try {
+        const url = new URL(apiBase, window.location.origin);
+        if (searchTerm) {
+          url.searchParams.set("search", searchTerm);
         }
 
-        notes.forEach((note) => {
-          const clone = template.content.cloneNode(true);
-          clone.querySelector('[data-field="title"]').textContent = note.title;
-          clone.querySelector('[data-field="created_at"]').textContent = formatDate(note.created_at);
-          clone.querySelector('[data-field="content"]').textContent = note.content;
-          const deleteBtn = clone.querySelector('[data-action="delete"]');
-          deleteBtn.dataset.id = note.id;
-          notesList.appendChild(clone);
-        });
-      };
+        const response = await fetch(url, { credentials: "same-origin" });
+        if (response.status === 401) {
+          currentUser = null;
+          updateSessionUI();
+          showMessage("Tu sesión ha caducado", "error");
+          return;
+        }
+        if (!response.ok) throw new Error("Error");
+        const data = await response.json();
+        renderNotes(data);
+      } catch (error) {
+        console.error(error);
+        showMessage("Error de conexión", "error");
+      }
+    };
 
-      const setNotesEnabled = (enabled) => {
-        const fields = [
-          titleInput,
-          contentInput,
-          form.querySelector("button[type='submit']"),
-          refreshBtn,
-          searchInput,
-        ];
-        fields.forEach((el) => {
-          if (el) el.disabled = !enabled;
+    const loadSession = async () => {
+      try {
+        const response = await fetch(sessionApi, {
+          method: "GET",
+          credentials: "same-origin",
         });
-      };
-
-      const updateSessionUI = () => {
+        if (!response.ok) throw new Error("Sin sesión");
+        const data = await response.json();
+        currentUser = data.username;
+      } catch (error) {
+        currentUser = null;
+      } finally {
+        updateSessionUI();
         if (currentUser) {
-          sessionStatus.textContent = `✅ Sesión activa: ${currentUser}`;
-          sessionStatus.dataset.state = "logged";
-          logoutBtn.disabled = false;
-          usernameInput.value = currentUser;
-          setNotesEnabled(true);
-        } else {
-          sessionStatus.textContent = "No has iniciado sesión.";
-          sessionStatus.dataset.state = "guest";
-          logoutBtn.disabled = true;
-          usernameInput.value = "";
-          setNotesEnabled(false);
-          renderLoggedOutState();
+          fetchNotes(currentSearch);
         }
+      }
+    };
+
+    sessionForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const username = usernameInput.value.trim();
+      if (!username) {
+        showMessage("Ingresa un nombre válido", "error");
+        return;
+      }
+
+      try {
+        const response = await fetch(sessionApi, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ username }),
+        });
+
+        if (!response.ok) throw new Error("Error login");
+        const data = await response.json();
+        currentUser = data.username;
+        currentSearch = "";
+        searchInput.value = "";
+        updateSessionUI();
+        showMessage(`Bienvenido, ${currentUser}`);
+        await fetchNotes();
+      } catch (error) {
+        console.error(error);
+        showMessage("Error al iniciar sesión", "error");
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await fetch(sessionApi, {
+          method: "DELETE",
+          credentials: "same-origin",
+        });
+      } catch (error) { console.error(error); }
+      finally {
+        currentUser = null;
+        currentSearch = "";
+        searchInput.value = "";
+        titleInput.value = "";
+        contentInput.value = "";
+        updateSessionUI();
+        showMessage("Sesión cerrada correctamente");
+      }
+    });
+
+    const resetForm = () => {
+      titleInput.value = "";
+      contentInput.value = "";
+      editingNoteId = null;
+      submitBtn.textContent = "Guardar nota";
+      cancelEditBtn.style.display = "none";
+      document.querySelector("section.card:nth-of-type(2) h2").textContent = "📝 Nueva Nota";
+    };
+
+    cancelEditBtn.addEventListener("click", resetForm);
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!currentUser) return;
+
+      const payload = {
+        title: titleInput.value.trim(),
+        content: contentInput.value.trim(),
       };
 
-      const fetchNotes = async (searchTerm = "") => {
-        if (!currentUser) {
-          renderLoggedOutState();
-          return;
-        }
-        try {
-          const url = new URL(apiBase, window.location.origin);
-          if (searchTerm) {
-            url.searchParams.set("search", searchTerm);
-          }
+      if (!payload.title || !payload.content) {
+        showMessage("Campos vacíos", "error");
+        return;
+      }
 
-          const response = await fetch(url, { credentials: "same-origin" });
-          if (response.status === 401) {
-            currentUser = null;
-            updateSessionUI();
-            showMessage("Tu sesión ha caducado", "error");
-            return;
-          }
-          if (!response.ok) throw new Error("Error");
-          const data = await response.json();
-          renderNotes(data);
-        } catch (error) {
-          console.error(error);
-          showMessage("Error de conexión", "error");
-        }
-      };
+      try {
+        const method = editingNoteId ? "PUT" : "POST";
+        const url = editingNoteId ? `${apiBase}/${editingNoteId}` : `${apiBase}/`;
 
-      const loadSession = async () => {
-        try {
-          const response = await fetch(sessionApi, {
-            method: "GET",
-            credentials: "same-origin",
-          });
-          if (!response.ok) throw new Error("Sin sesión");
-          const data = await response.json();
-          currentUser = data.username;
-        } catch (error) {
+        const response = await fetch(url, {
+          method: method,
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) throw new Error("Error al guardar");
+
+        resetForm();
+
+        showMessage(editingNoteId ? "Nota actualizada" : "Nota guardada con éxito");
+        await fetchNotes(currentSearch);
+      } catch (error) {
+        console.error(error);
+        showMessage("Error al guardar la nota", "error");
+      }
+    });
+
+    notesList.addEventListener("click", async (event) => {
+      // Handle Edit
+      const editBtn = event.target.closest("button[data-action='edit']");
+      if (editBtn && currentUser) {
+        editingNoteId = editBtn.dataset.id;
+        titleInput.value = editBtn.dataset.title;
+        contentInput.value = editBtn.dataset.content;
+
+        // Update UI for edit mode
+        submitBtn.textContent = "Actualizar nota";
+        cancelEditBtn.style.display = "inline-block";
+        document.querySelector("section.card:nth-of-type(2) h2").textContent = "✏️ Editar Nota";
+
+        // Scroll to form
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        titleInput.focus();
+        return;
+      }
+
+      const button = event.target.closest("button[data-action='delete']");
+      if (!button || !currentUser) return;
+
+      const noteId = button.dataset.id;
+      if (!window.confirm("¿Estás seguro de eliminar esta nota?")) return;
+
+      try {
+        const response = await fetch(`${apiBase}/${noteId}`, {
+          method: "DELETE",
+          credentials: "same-origin",
+        });
+        if (response.status === 401) {
           currentUser = null;
-        } finally {
           updateSessionUI();
-          if (currentUser) {
-            fetchNotes(currentSearch);
-          }
-        }
-      };
-
-      sessionForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const username = usernameInput.value.trim();
-        if (!username) {
-          showMessage("Ingresa un nombre válido", "error");
           return;
         }
+        if (!response.ok) throw new Error("Error delete");
+        showMessage("Nota eliminada");
+        await fetchNotes(currentSearch);
+      } catch (error) {
+        console.error(error);
+        showMessage("No se pudo eliminar", "error");
+      }
+    });
 
-        try {
-          const response = await fetch(sessionApi, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "same-origin",
-            body: JSON.stringify({ username }),
-          });
+    refreshBtn.addEventListener("click", () => {
+      if (currentUser) fetchNotes(currentSearch);
+    });
 
-          if (!response.ok) throw new Error("Error login");
-          const data = await response.json();
-          currentUser = data.username;
-          currentSearch = "";
-          searchInput.value = "";
-          updateSessionUI();
-          showMessage(`Bienvenido, ${currentUser}`);
-          await fetchNotes();
-        } catch (error) {
-          console.error(error);
-          showMessage("Error al iniciar sesión", "error");
-        }
-      });
+    searchInput.addEventListener("input", (event) => {
+      currentSearch = event.target.value.trim();
+      if (currentUser) fetchNotes(currentSearch);
+    });
 
-      logoutBtn.addEventListener("click", async () => {
-        try {
-          await fetch(sessionApi, {
-            method: "DELETE",
-            credentials: "same-origin",
-          });
-        } catch (error) { console.error(error); }
-        finally {
-          currentUser = null;
-          currentSearch = "";
-          searchInput.value = "";
-          titleInput.value = "";
-          contentInput.value = "";
-          updateSessionUI();
-          showMessage("Sesión cerrada correctamente");
-        }
-      });
+    updateSessionUI();
+    loadSession();
+  </script>
+</body>
 
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        if (!currentUser) return;
-
-        const payload = {
-          title: titleInput.value.trim(),
-          content: contentInput.value.trim(),
-        };
-
-        if (!payload.title || !payload.content) {
-          showMessage("Campos vacíos", "error");
-          return;
-        }
-
-        try {
-          const response = await fetch(apiBase + "/", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "same-origin",
-            body: JSON.stringify(payload),
-          });
-
-          if (!response.ok) throw new Error("Error al guardar");
-
-          titleInput.value = "";
-          contentInput.value = "";
-
-          showMessage("Nota guardada con éxito");
-          await fetchNotes(currentSearch);
-        } catch (error) {
-          console.error(error);
-          showMessage("Error al guardar la nota", "error");
-        }
-      });
-
-      notesList.addEventListener("click", async (event) => {
-        const button = event.target.closest("button[data-action='delete']");
-        if (!button || !currentUser) return;
-
-        const noteId = button.dataset.id;
-        if (!window.confirm("¿Estás seguro de eliminar esta nota?")) return;
-
-        try {
-          const response = await fetch(`${apiBase}/${noteId}`, {
-            method: "DELETE",
-            credentials: "same-origin",
-          });
-          if (response.status === 401) {
-             currentUser = null;
-             updateSessionUI();
-             return;
-          }
-          if (!response.ok) throw new Error("Error delete");
-          showMessage("Nota eliminada");
-          await fetchNotes(currentSearch);
-        } catch (error) {
-          console.error(error);
-          showMessage("No se pudo eliminar", "error");
-        }
-      });
-
-      refreshBtn.addEventListener("click", () => {
-        if(currentUser) fetchNotes(currentSearch);
-      });
-
-      searchInput.addEventListener("input", (event) => {
-        currentSearch = event.target.value.trim();
-        if (currentUser) fetchNotes(currentSearch);
-      });
-
-      updateSessionUI();
-      loadSession();
-    </script>
-  </body>
 </html>
